@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -8,7 +9,8 @@ using WebApplication1.Models.DTO.Supplier;
 namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
+
     public class SupplierController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +23,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
+
         public async Task<IActionResult> GetAll()
         {
             var data = await _context.Supplier.ToListAsync();
@@ -33,6 +37,8 @@ namespace WebApplication1.Controllers
         }
         [HttpGet]
         [Route("{id}")]
+        [Authorize(Roles = "Admin,User")]
+
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var data = await _context.Supplier
@@ -47,6 +53,8 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Create(SupplierCreateDTO dto)
         {
 
@@ -63,6 +71,8 @@ namespace WebApplication1.Controllers
         }
         [HttpPut]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] SupplierUpdateDTO dto)
         {
             var data = await _context.Supplier
@@ -79,6 +89,8 @@ namespace WebApplication1.Controllers
         }
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _context.Supplier
